@@ -38,7 +38,7 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-function friendlyError(message: string): string {
+function friendlyError(message: string, context?: 'email'): string {
   const m = message.toLowerCase();
   if (m.includes('invalid login')) return 'E-mail ou senha incorretos.';
   if (m.includes('already registered') || m.includes('already been registered')) return 'Este e-mail já tem uma conta.';
@@ -46,6 +46,7 @@ function friendlyError(message: string): string {
   if (m.includes('email not confirmed')) return 'Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada.';
   if (m.includes('rate limit')) return 'Muitas tentativas. Aguarde um pouco e tente de novo.';
   if (m.includes('network') || m.includes('fetch')) return 'Sem conexão. Verifique sua internet.';
+  if (m.includes('smtp') || (context === 'email' && m.includes('unable to'))) return 'Não conseguimos enviar o e-mail agora. Verifique que o e-mail está correto e tente de novo.';
   return 'Não foi possível concluir. Tente novamente.';
 }
 
@@ -157,7 +158,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       password,
       options: { data: { name: name.trim() }, emailRedirectTo: Linking.createURL('/') },
     });
-    if (error) return { ok: false, message: friendlyError(error.message) };
+    if (error) return { ok: false, message: friendlyError(error.message, 'email') };
     return { ok: true, needsConfirmation: !data.session };
   }, []);
 
@@ -178,7 +179,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
       redirectTo: Linking.createURL('/'),
     });
-    return error ? { ok: false, message: friendlyError(error.message) } : { ok: true };
+    return error ? { ok: false, message: friendlyError(error.message, 'email') } : { ok: true };
   }, []);
 
   const updatePassword = useCallback<AuthContextValue['updatePassword']>(async (password) => {

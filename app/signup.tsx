@@ -38,6 +38,9 @@ export default function SignupScreen() {
           <Text>
             Enviamos um link de confirmação para {email.trim()}. Abra o e-mail, confirme e depois volte para entrar.
           </Text>
+          <Text variant="caption" tone="muted">
+            Dica: Verifique sua pasta de spam se não encontrar o e-mail em alguns minutos.
+          </Text>
         </Card>
         <Button title="Ir para o login" onPress={() => router.replace('/login')} />
       </AuthLayout>

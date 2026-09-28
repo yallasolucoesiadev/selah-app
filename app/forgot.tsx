@@ -31,8 +31,11 @@ export default function ForgotScreen() {
     <AuthLayout title="Recuperar senha" subtitle="Enviaremos um link para você criar uma nova senha." back>
       {sent ? (
         <>
-          <Card tone="soft">
+          <Card tone="soft" style={{ gap: 8 }}>
             <Text>Se este e-mail tiver uma conta, o link já está a caminho. Abra o e-mail neste celular para continuar.</Text>
+            <Text variant="caption" tone="muted">
+              Dica: Verifique sua pasta de spam se não encontrar o e-mail em alguns minutos.
+            </Text>
           </Card>
           <Button title="Voltar ao login" onPress={() => router.replace('/login')} />
         </>
