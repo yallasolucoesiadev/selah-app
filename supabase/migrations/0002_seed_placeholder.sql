@@ -1,0 +1,47 @@
+-- SELAH — 5 dias de conteúdo PLACEHOLDER (exemplo genérico, NÃO é conteúdo protegido).
+-- Substitua pelo conteúdo devocional autorizado (via service role / painel do Supabase).
+
+insert into public.devotionals
+  (day_number, title, verse_text, verse_reference, content, highlight_phrase, reflection_prompt, challenge_text, audio_url, reflection_questions)
+values
+(1, 'Aquietar o coração',
+ 'Aquietai-vos, e sabei que eu sou Deus.', 'Salmos 46:10',
+ E'[CONTEÚDO DE EXEMPLO]\n\nHá dias em que o barulho de fora é o menor problema: o que pesa é o barulho de dentro. Pensamentos que correm, listas que não terminam, preocupações que chegam antes da hora.\n\nEste é um texto de exemplo para mostrar como a leitura aparece no app. Aqui entrará o conteúdo devocional autorizado. Por ora, fique com uma ideia simples: parar por alguns instantes também é uma forma de cuidar da alma.\n\nRespire fundo. Não há pressa neste momento.',
+ 'Parar por alguns instantes também é uma forma de cuidar da alma.',
+ 'O que está mais barulhento dentro de você hoje?',
+ 'Ofereça cinco minutos de silêncio e atenção total a alguém da sua casa, sem celular por perto.',
+ null,
+ '["O que está ocupando mais espaço na sua mente neste momento?","Em que momento do seu dia você consegue, de verdade, ficar em silêncio?","O que mudaria se você reservasse alguns minutos de quietude por dia?"]'::jsonb),
+(2, 'Descansar sem culpa',
+ 'Vinde a mim, todos os que estais cansados e oprimidos, e eu vos aliviarei.', 'Mateus 11:28',
+ E'[CONTEÚDO DE EXEMPLO]\n\nCansaço nem sempre é falta de sono. Às vezes é excesso de tentativa de dar conta de tudo sozinho.\n\nEste é um texto genérico de exemplo, escrito só para o app funcionar. O devocional real será carregado do Supabase. A ideia por trás dele: descansar não é fraqueza, e pedir ajuda também faz parte da caminhada.',
+ 'Descansar não é fraqueza.',
+ 'Onde você tem carregado peso demais sozinho?',
+ 'Pergunte a alguém próximo: "Como posso te ajudar hoje?" e escute a resposta com atenção.',
+ null,
+ '["Que peso você tem carregado por conta própria?","O que te impede de pedir ajuda ou de descansar?","Como seria um descanso de verdade para você esta semana?"]'::jsonb),
+(3, 'Confiar no caminho',
+ 'Confia no Senhor de todo o teu coração, e não te estribes no teu próprio entendimento.', 'Provérbios 3:5',
+ E'[CONTEÚDO DE EXEMPLO]\n\nNem sempre entendemos o desenho completo da estrada. Muitas vezes só enxergamos o próximo passo.\n\nTexto de exemplo para demonstração. Aqui entrará o conteúdo devocional autorizado. Por enquanto, a mensagem é curta: dê o passo que está ao seu alcance hoje, e deixe o restante para o dia de amanhã.',
+ 'Dê o passo que está ao seu alcance hoje.',
+ 'Qual é o próximo passo pequeno que você já sabe que precisa dar?',
+ 'Envie uma mensagem de incentivo a alguém que está enfrentando uma decisão difícil.',
+ null,
+ '["Em que área da vida você mais quer ver o caminho inteiro antes de andar?","Qual é o próximo passo pequeno que você já sabe que precisa dar?","O que te ajudaria a confiar um pouco mais nesse processo?"]'::jsonb),
+(4, 'Gratidão que enxerga',
+ 'Não estejais inquietos por coisa alguma; antes as vossas petições sejam em tudo conhecidas diante de Deus pela oração e súplicas, com ação de graças.', 'Filipenses 4:6',
+ E'[CONTEÚDO DE EXEMPLO]\n\nGratidão é um jeito de olhar. Quando aprendemos a notar o que já recebemos, a ansiedade perde um pouco do território.\n\nEste texto é apenas ilustrativo. O devocional real virá do Supabase. Experimente hoje listar mentalmente três coisas simples pelas quais você é grato.',
+ 'Gratidão é um jeito de olhar.',
+ 'Que três coisas simples você quer agradecer hoje?',
+ 'Escreva um bilhete curto de agradecimento a alguém que fez diferença na sua semana.',
+ null,
+ '["Pelo que você é grato hoje, mesmo que seja algo pequeno?","O que costuma roubar sua atenção do que já é bom?","Como você poderia expressar sua gratidão a alguém hoje?"]'::jsonb),
+(5, 'Amar com atitudes',
+ 'Nós o amamos a ele, porque ele nos amou primeiro.', '1 João 4:19',
+ E'[CONTEÚDO DE EXEMPLO]\n\nAmar não é apenas sentir: é escolher, de novo e de novo, agir com cuidado.\n\nTexto de exemplo, escrito só para demonstrar o app. O conteúdo devocional autorizado será inserido depois. A ideia central aqui: pequenos gestos de atenção valem mais do que grandes discursos.',
+ 'Pequenos gestos de atenção valem mais do que grandes discursos.',
+ 'Que gesto simples de cuidado você pode oferecer hoje?',
+ 'Faça algo gentil por alguém sem esperar nada em troca e sem contar a ninguém.',
+ null,
+ '["Quem precisa da sua atenção ou do seu cuidado nesta semana?","O que costuma te impedir de demonstrar carinho com atitudes?","Que gesto simples você pode fazer ainda hoje?"]'::jsonb)
+on conflict (day_number) do nothing;

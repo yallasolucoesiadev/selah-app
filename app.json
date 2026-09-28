@@ -18,8 +18,7 @@
       "adaptiveIcon": {
         "backgroundColor": "#FAF6EF",
         "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "backgroundImage": "./assets/android-icon-background.png"
       },
       "predictiveBackGestureEnabled": false
     },
@@ -30,7 +29,7 @@
       "expo-font",
       ["expo-audio", { "microphonePermission": false }],
       ["expo-notifications", { "color": "#C8A96A" }],
-      ["expo-splash-screen", { "image": "./assets/splash-icon.png", "backgroundColor": "#FAF6EF", "dark": { "backgroundColor": "#1B1511" } }]
+      ["expo-splash-screen", { "image": "./assets/splash-icon.png", "imageWidth": 260, "resizeMode": "contain", "backgroundColor": "#FAF6EF" }]
     ],
     "experiments": { "typedRoutes": true }
   }
