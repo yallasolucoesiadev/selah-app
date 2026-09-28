@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 
 import { Button } from '@/components/Button';
@@ -18,7 +18,7 @@ export default function ChallengeScreen() {
   const { devotionalId } = useLocalSearchParams<{ devotionalId?: string }>();
   const journey = useJourney();
   const { data: logs, reload } = useLoad<ChallengeLog[]>(listChallenges, []);
-  const [notes, setNotes] = useState('');
+  const [draftNotes, setNotes] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,9 +26,8 @@ export default function ChallengeScreen() {
     journey.devotionals.find((d) => d.id === devotionalId) ?? journey.today ?? null;
   const log = logs.find((l) => l.devotional_id === devotional?.id) ?? null;
 
-  useEffect(() => {
-    setNotes(log?.notes ?? '');
-  }, [log?.id, log?.notes]);
+  // O campo mostra o rascunho enquanto o usuário digita; sem rascunho, mostra o que já foi salvo.
+  const notes = draftNotes ?? log?.notes ?? '';
 
   const update = async (status: 'pending' | 'done', withNotes?: string) => {
     if (!devotional) return;

@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 
 import { Button } from '@/components/Button';
@@ -27,13 +27,13 @@ export default function ProfileScreen() {
   const router = useRouter();
   const { profile, updateProfile, signOut, isDemo } = useAuth();
   const stats = useStats();
-  const [name, setName] = useState(profile?.name ?? '');
+  const [draftName, setName] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
-
-  useEffect(() => setName(profile?.name ?? ''), [profile?.name]);
+  const name = draftName ?? profile?.name ?? '';
 
   const save = async () => {
     await updateProfile({ name: name.trim() || null });
+    setName(null);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };

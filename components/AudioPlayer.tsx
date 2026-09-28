@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { setAudioModeAsync, useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
+import { AudioPlayer as AudioPlayerInstance, setAudioModeAsync, useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import React, { useEffect, useRef, useState } from 'react';
 import { LayoutChangeEvent, Pressable, View } from 'react-native';
 
@@ -17,6 +17,11 @@ interface AudioPlayerProps {
 }
 
 const RATES = [1, 1.25, 1.5, 0.75];
+
+// O volume do expo-audio é uma propriedade do objeto nativo do player.
+function applyVolume(player: AudioPlayerInstance, value: number) {
+  player.volume = value;
+}
 
 function format(seconds: number): string {
   const total = Math.max(0, Math.floor(seconds || 0));
@@ -116,7 +121,7 @@ export function AudioPlayer({ uri, title, resumeKey }: AudioPlayerProps) {
   const changeVolume = (delta: number) => {
     const next = Math.round(Math.min(1, Math.max(0, volume + delta)) * 10) / 10;
     setVolume(next);
-    player.volume = next;
+    applyVolume(player, next);
   };
   const seekFromTouch = (x: number) => {
     if (!barWidth || !status.duration) return;

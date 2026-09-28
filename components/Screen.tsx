@@ -5,6 +5,9 @@ import { Edge, SafeAreaView } from 'react-native-safe-area-context';
 import { SCREEN_PADDING } from '@/constants/spacing';
 import { useTheme } from '@/hooks/useTheme';
 
+/** Em telas largas (web/tablet) o conteúdo fica centralizado, com largura de leitura confortável. */
+const MAX_WIDTH = 640;
+
 interface ScreenProps {
   children: React.ReactNode;
   /** Conteúdo rolável (padrão). Use false para telas com layout fixo (ex.: chat). */
@@ -33,16 +36,25 @@ export function Screen({
         {scroll ? (
           <ScrollView
             style={{ flex: 1 }}
-            contentContainerStyle={[{ paddingHorizontal: padding, paddingBottom: 32, flexGrow: 1 }, contentStyle]}
+            contentContainerStyle={[
+              { paddingHorizontal: padding, paddingBottom: 32, flexGrow: 1, width: '100%', maxWidth: MAX_WIDTH, alignSelf: 'center' },
+              contentStyle,
+            ]}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
           >
             {children}
           </ScrollView>
         ) : (
-          <View style={[{ flex: 1, paddingHorizontal: padding }, contentStyle]}>{children}</View>
+          <View style={[{ flex: 1, paddingHorizontal: padding, width: '100%', maxWidth: MAX_WIDTH, alignSelf: 'center' }, contentStyle]}>
+            {children}
+          </View>
         )}
-        {footer ? <View style={{ paddingHorizontal: SCREEN_PADDING, paddingVertical: 12 }}>{footer}</View> : null}
+        {footer ? (
+          <View style={{ paddingHorizontal: SCREEN_PADDING, paddingVertical: 12, width: '100%', maxWidth: MAX_WIDTH, alignSelf: 'center' }}>
+            {footer}
+          </View>
+        ) : null}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

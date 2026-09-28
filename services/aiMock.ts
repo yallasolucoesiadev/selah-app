@@ -57,7 +57,7 @@ export function snippetOf(text: string, max = 90): string {
 }
 
 const THEMES: { pattern: RegExp; line: string }[] = [
-  { pattern: /ansios|preocup|medo|inquiet/i, line: 'Percebo que há inquietação nas suas palavras, e é legítimo sentir isso.' },
+  { pattern: /ansied|ansios|preocup|medo|inquiet/i, line: 'Percebo que há inquietação nas suas palavras, e é legítimo sentir isso.' },
   { pattern: /cansa|sobrecarreg|exaust|peso/i, line: 'Parece que você tem carregado bastante coisa, e isso cansa mesmo.' },
   { pattern: /grat|agrade|obrigad/i, line: 'Que bonito perceber gratidão no que você escreveu.' },
   { pattern: /dire[cç][aã]o|decis|caminho|escolh/i, line: 'Buscar direção é um gesto de cuidado com o próprio caminho.' },
@@ -95,10 +95,12 @@ function lastUserText(messages: AiRequestMessage[]): string {
   return '';
 }
 
+function themeLine(text: string): string | null {
+  return THEMES.find((t) => t.pattern.test(text))?.line ?? null;
+}
+
 function acknowledge(text: string): string {
-  const theme = THEMES.find((t) => t.pattern.test(text));
-  if (theme) return theme.line;
-  return `Obrigado por compartilhar: "${snippetOf(text)}"`;
+  return themeLine(text) ?? `Obrigado por compartilhar: "${snippetOf(text)}"`;
 }
 
 function chatReply(req: AiRequest): AiResponse {
@@ -111,7 +113,8 @@ function chatReply(req: AiRequest): AiResponse {
 
   const questions = req.devotional?.reflection_questions.length ? req.devotional.reflection_questions : null;
   const pool = questions ?? (req.devotional ? GENERIC_QUESTIONS : FREE_QUESTIONS);
-  const question = pool[(userTurns - 1) % pool.length];
+  // No devocional a pergunta 0 já foi feita pela reflexão guiada; na conversa livre começamos do zero.
+  const question = pool[(req.devotional ? userTurns : userTurns - 1) % pool.length];
 
   const lines = [acknowledge(last), question];
   if (req.devotional && userTurns >= 3) {
@@ -127,7 +130,7 @@ function guidedQuestion(req: AiRequest): AiResponse {
   const question =
     req.devotional?.reflection_questions[0] ?? 'O que, dessa mensagem, mais tocou você hoje?';
   const intro = reflection
-    ? `Li o que você escreveu: "${snippetOf(reflection)}". ${acknowledge(reflection)}`
+    ? `Li o que você escreveu: "${snippetOf(reflection)}"${themeLine(reflection) ? `\n\n${themeLine(reflection)}` : ''}`
     : `Vamos conversar sobre${title ? ` "${title}"` : ' o que você leu'}.`;
   return { text: `${intro}\n\n${question}` };
 }
@@ -142,9 +145,7 @@ function prayer(req: AiRequest): AiResponse {
   if (req.reflection?.trim()) lines.push('', `Eu pensei sobre isto: "${snippetOf(req.reflection, 160)}".`);
   const chatTexts = req.messages.filter((m) => m.role === 'user').map((m) => m.content);
   if (chatTexts.length > 0) lines.push(`Também compartilhei: "${snippetOf(chatTexts[chatTexts.length - 1], 120)}".`);
-  if (req.devotional?.highlight_phrase) {
-    lines.push('', `Levo comigo esta ideia: "${req.devotional.highlight_phrase}"`);
-  }
+  // A oração usa SOMENTE o que o usuário compartilhou (nada do texto do devocional).
   lines.push(
     '',
     'Peço serenidade para o dia de hoje, clareza para o próximo passo e um coração atento às pessoas ao meu redor.',
