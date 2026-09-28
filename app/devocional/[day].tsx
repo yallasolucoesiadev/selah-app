@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { View } from 'react-native';
 
 import { AIStep } from '@/components/devotional/AIStep';
@@ -43,7 +43,7 @@ export default function DevotionalFlowScreen() {
   const [prayer, setPrayer] = useState<string | null>(null);
   const [prayerSaved, setPrayerSaved] = useState(false);
   const [generating, setGenerating] = useState(false);
-  const [summary, setSummary] = useState<string | null>(null);
+  const [prayerError, setPrayerError] = useState<string | null>(null);
   const [takeaway, setTakeaway] = useState('');
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -66,13 +66,8 @@ export default function DevotionalFlowScreen() {
     [devotional],
   );
 
-  // Resumo pessoal ao chegar na última etapa.
-  useEffect(() => {
-    if (step !== 5 || summary || !devotional) return;
-    summarizeMoment(devotional, reflection, messages)
-      .then((r) => setSummary(r.text))
-      .catch(() => undefined);
-  }, [step, summary, devotional, reflection, messages]);
+  // Resumo pessoal (montado no aparelho) para a última etapa.
+  const summary = devotional && step === 5 ? summarizeMoment(devotional, reflection).text : null;
 
   if (journey.loading) {
     return (
@@ -135,15 +130,16 @@ export default function DevotionalFlowScreen() {
 
   const createPrayer = async () => {
     setGenerating(true);
-    try {
-      const reply = await generatePrayer(devotional, reflection, messages);
+    setPrayerError(null);
+    const reply = await generatePrayer(reflection, messages);
+    if (reply.fallback) {
+      // A mensagem de contingência não é uma oração: não vira texto salvável.
+      setPrayerError(reply.text);
+    } else {
       setPrayer(reply.text);
       setPrayerSaved(false);
-    } catch {
-      setPrayer(null);
-    } finally {
-      setGenerating(false);
     }
+    setGenerating(false);
   };
 
   const keepPrayer = async () => {
@@ -207,6 +203,7 @@ export default function DevotionalFlowScreen() {
             prayer={prayer}
             saved={prayerSaved}
             generating={generating}
+            error={prayerError}
             onGenerate={() => void createPrayer()}
             onSave={() => void keepPrayer()}
             onNext={() => setStep(5)}

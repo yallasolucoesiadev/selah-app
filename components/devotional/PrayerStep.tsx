@@ -11,12 +11,14 @@ interface PrayerStepProps {
   prayer: string | null;
   saved: boolean;
   generating: boolean;
+  /** Mensagem acolhedora quando a IA não conseguiu criar a oração. */
+  error?: string | null;
   onGenerate: () => void;
   onSave: () => void;
   onNext: () => void;
 }
 
-export function PrayerStep({ prayer, saved, generating, onGenerate, onSave, onNext }: PrayerStepProps) {
+export function PrayerStep({ prayer, saved, generating, error, onGenerate, onSave, onNext }: PrayerStepProps) {
   const [speaking, setSpeaking] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -63,6 +65,11 @@ export function PrayerStep({ prayer, saved, generating, onGenerate, onSave, onNe
             de Deus.
           </Text>
         )}
+        {error ? (
+          <Text tone="danger" accessibilityLiveRegion="polite">
+            {error}
+          </Text>
+        ) : null}
       </ScrollView>
 
       <View style={{ gap: 8 }}>
