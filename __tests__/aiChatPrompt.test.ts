@@ -46,12 +46,17 @@ describe('ai-chat / parseRequest', () => {
 
 describe('ai-chat / prompt de sistema', () => {
   it('usa a base da SELAH e as regras invioláveis', () => {
-    const prompt = buildSystemPrompt({ context: 'livre' });
-    expect(prompt.startsWith('Você é a SELAH, uma companheira de reflexão espiritual')).toBe(true);
-    expect(prompt).toContain(SYSTEM_PROMPT_BASE);
-    expect(prompt).toContain('Nunca afirmar ser Deus');
-    expect(prompt).toContain('não citar um versículo específico');
-    expect(prompt).toContain('Respostas curtas (2-4 frases)');
+    const promptDevocional = buildSystemPrompt({ context: 'devotional' });
+    expect(promptDevocional.startsWith('Você é a SELAH, uma companheira de reflexão espiritual')).toBe(true);
+    expect(promptDevocional).toContain(SYSTEM_PROMPT_BASE);
+    expect(promptDevocional).toContain('Nunca afirmar ser Deus');
+    expect(promptDevocional).toContain('não citar um versículo específico');
+    expect(promptDevocional).toContain('Respostas curtas (2-4 frases)');
+
+    const promptLivre = buildSystemPrompt({ context: 'livre' });
+    expect(promptLivre).toContain('Você é a SELAH');
+    expect(promptLivre).toContain('Nunca afirmar ser Deus');
+    expect(promptLivre).toContain('Respostas curtas (2-4 frases)');
   });
 
   it('devotional inclui o conteúdo do dia; livre e oracao não', () => {

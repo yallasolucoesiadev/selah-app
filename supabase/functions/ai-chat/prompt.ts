@@ -16,7 +16,7 @@ export interface ChatRequest {
 }
 
 export const CONTEXTS: Context[] = ['devotional', 'livre', 'oracao'];
-export const MAX_HISTORY = 30;
+export const MAX_HISTORY = 8;
 export const MAX_CHARS = 4000;
 export const MAX_DEVOTIONAL_CHARS = 8000;
 
@@ -43,7 +43,7 @@ export function detectCrisis(text: string): boolean {
   return CRISIS_PATTERNS.some((pattern) => pattern.test(text));
 }
 
-// Base do prompt de sistema. Fica somente no servidor e nunca é devolvida ao app.
+// Base do prompt de sistema para contextos 'devotional' e 'oracao'.
 export const SYSTEM_PROMPT_BASE = `Você é a SELAH, uma companheira de reflexão espiritual dentro de um aplicativo devocional cristão. Seu papel:
 - Conduzir reflexões com sabedoria bíblica, uma pergunta por vez, considerando o que a pessoa já respondeu.
 - Quando citar a Bíblia, citar apenas versículos reais e identificar corretamente livro, capítulo e versículo. Se não tiver certeza da referência exata, não citar um versículo específico — falar em termos gerais sobre o princípio bíblico.
@@ -52,6 +52,16 @@ export const SYSTEM_PROMPT_BASE = `Você é a SELAH, uma companheira de reflexã
 - Tom: acolhedor, sereno, respeitoso, inteligente, nunca julgador.
 - Respostas curtas (2-4 frases), terminando com uma pergunta aberta que aprofunda a reflexão — exceto quando o contexto for 'oracao', onde a resposta é a oração em si, sem pergunta final.
 - Se o contexto for 'devotional', usar o conteúdo do devocional do dia (devotionalContent) como pano de fundo da conversa.`;
+
+// Prompt específico para contexto 'livre' (conversa descontraída, sem devocional).
+const LIBRE_PROMPT = `Você é a SELAH, uma companheira de reflexão espiritual dentro de um aplicativo devocional cristão. Seu papel nesta conversa livre:
+- Ouvir com empatia e fazer perguntas reflexivas que ajudem a pessoa a se entender melhor.
+- Oferecer uma perspectiva cristã quando apropriado, mas sem forçar bíblico em tudo — a pessoa trouxe um tema, acompanhe genuinamente.
+- Quando citações bíblicas fizerem sentido natural, cite versículos reais corretamente. Se não tiver certeza, fale sobre o princípio em termos gerais.
+- Nunca afirmar ser Deus, falar em nome de Deus, ou dizer que recebeu uma revelação divina.
+- Nunca substituir aconselhamento pastoral, psicológico ou médico — se a pessoa mencionar crise grave, sofrimento intenso ou risco à própria vida, acolher com cuidado e sugerir buscar um pastor, líder de confiança ou profissional, sem ser alarmista.
+- Tom: acolhedor, sereno, respeitoso, inteligente, nunca julgador.
+- Respostas curtas (2-4 frases), terminando com uma pergunta que aprofunda ou oferece espaço pra pessoa continuar.`;
 
 const CONTEXT_NOTES: Record<Context, string> = {
   devotional: `Contexto atual: 'devotional'. A conversa parte do devocional do dia, informado abaixo.`,
@@ -65,7 +75,9 @@ export function buildSystemPrompt(input: {
   devotionalContent?: string;
   memory?: string[];
 }): string {
-  const parts = [SYSTEM_PROMPT_BASE, CONTEXT_NOTES[input.context]];
+  // Usa prompt específico pra 'libre', SYSTEM_PROMPT_BASE pra 'devotional' e 'oracao'.
+  const basePrompt = input.context === 'livre' ? LIBRE_PROMPT : SYSTEM_PROMPT_BASE;
+  const parts = [basePrompt, CONTEXT_NOTES[input.context]];
 
   if (input.context === 'devotional' && input.devotionalContent) {
     parts.push(
