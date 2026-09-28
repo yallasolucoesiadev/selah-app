@@ -30,7 +30,7 @@ export function Modal({ visible, onClose, title, message, children, confirmLabel
         <Pressable
           accessibilityViewIsModal
           onPress={() => undefined}
-          style={[{ width: '100%', maxWidth: 420, backgroundColor: colors.surface, borderRadius: radius.lg, padding: 24, gap: 12 }, shadow(2)]}
+          style={[{ width: '100%', maxWidth: 420, backgroundColor: colors.surface, borderRadius: radius.xl, padding: 24, gap: 12 }, shadow(2)]}
         >
           <Text variant="heading" accessibilityRole="header">
             {title}

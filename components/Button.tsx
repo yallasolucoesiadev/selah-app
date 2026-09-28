@@ -52,7 +52,7 @@ export function Button({
         {
           minHeight: MIN_TOUCH + 4,
           paddingHorizontal: 24,
-          borderRadius: radius.pill,
+          borderRadius: radius.full,
           backgroundColor: background,
           borderWidth: variant === 'secondary' ? 1.5 : 0,
           borderColor,

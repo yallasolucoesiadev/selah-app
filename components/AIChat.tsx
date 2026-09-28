@@ -125,7 +125,7 @@ export function AIChat({
           style={{
             flex: 1,
             minHeight: MIN_TOUCH + 4,
-            borderRadius: radius.lg,
+            borderRadius: radius.md,
             borderWidth: 1.5,
             borderColor: colors.border,
             backgroundColor: colors.surface,

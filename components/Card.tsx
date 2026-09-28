@@ -16,7 +16,7 @@ export function Card({ children, onPress, tone = 'surface', style, accessibility
   const { colors, shadow } = useTheme();
   const base: ViewStyle = {
     backgroundColor: tone === 'soft' ? colors.surfaceAlt : colors.surface,
-    borderRadius: radius.lg,
+    borderRadius: radius.xl,
     padding: 20,
     borderColor: colors.border,
     ...shadow(1),

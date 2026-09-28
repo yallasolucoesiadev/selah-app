@@ -5,6 +5,7 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { radius } from '@/constants/radius';
 import { useTheme } from '@/hooks/useTheme';
 import { Text } from './Text';
 
@@ -31,6 +32,9 @@ export function BottomNavigation({ state, navigation }: BottomTabBarProps) {
         backgroundColor: colors.tabBar,
         borderTopWidth: 1,
         borderTopColor: colors.border,
+        borderTopLeftRadius: radius.lg,
+        borderTopRightRadius: radius.lg,
+        overflow: 'hidden',
         paddingTop: 8,
         paddingBottom: Math.max(insets.bottom, 8),
       }}

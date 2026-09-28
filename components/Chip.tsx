@@ -23,7 +23,7 @@ export function Chip({ label, onPress, selected = false }: ChipProps) {
       style={({ pressed }) => ({
         minHeight: MIN_TOUCH - 4,
         paddingHorizontal: 18,
-        borderRadius: radius.pill,
+        borderRadius: radius.full,
         justifyContent: 'center',
         backgroundColor: selected ? colors.gold : colors.surface,
         borderWidth: 1,

@@ -28,7 +28,7 @@ export function ReflectionInput({
     <View
       style={{
         backgroundColor: colors.surface,
-        borderRadius: radius.lg,
+        borderRadius: radius.md,
         borderWidth: 1.5,
         borderColor: colors.border,
         padding: 16,

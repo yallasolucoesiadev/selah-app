@@ -58,7 +58,7 @@ export function WordStep({ devotional, favorite, onToggleFavorite, onNext }: Wor
               alignItems: 'center',
               gap: 10,
               paddingHorizontal: 16,
-              borderRadius: radius.pill,
+              borderRadius: radius.full,
               backgroundColor: colors.surfaceAlt,
               alignSelf: 'flex-start',
             }}
